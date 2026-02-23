@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile | Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.pic-customizer{background:#0c0c20;border:1px solid rgba(0,255,65,.2);border-radius:8px;padding:24px;margin-bottom:24px}
+.pic-customizer h3{font-family:'Orbitron',sans-serif;color:#00ff41;font-size:13px;letter-spacing:2px;margin-bottom:20px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.pic-customizer h3::before{content:'//';color:rgba(0,255,65,.4)}
+.pic-layout{display:grid;grid-template-columns:220px 1fr;gap:32px;align-items:start}
+.pic-preview-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.pic-preview-ring{position:relative;width:180px;height:180px}
+.ring-glow{position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(#00ff41 0%,#00b4ff 50%,#00ff41 100%);animation:spin-ring 4s linear infinite;z-index:0}
+.ring-inner{position:absolute;inset:2px;background:#080818;border-radius:50%;z-index:1}
+@keyframes spin-ring{to{transform:rotate(360deg)}}
+#profile-preview{position:absolute;inset:2px;z-index:2;object-fit:cover;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;transition:border-radius .35s ease}
+.preview-badge{position:absolute;bottom:8px;right:8px;z-index:10;background:#00ff41;color:#050510;font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 7px;letter-spacing:1px;border-radius:2px;display:none}
+.preview-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,65,.5);letter-spacing:1px;text-transform:uppercase;text-align:center}
+.shape-row{display:flex;gap:8px;flex-wrap:wrap}
+.shape-btn{width:44px;height:44px;background:#0a0a1a;border:1px solid rgba(0,255,65,.25);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:rgba(0,255,65,.6);font-size:18px}
+.shape-btn:hover{border-color:#00ff41;color:#00ff41}
+.shape-btn.active{border-color:#00ff41;background:rgba(0,255,65,.1);color:#00ff41;box-shadow:0 0 10px rgba(0,255,65,.3)}
+.shape-btn[data-shape="circle"]{border-radius:50%}
+.shape-btn[data-shape="rounded"]{border-radius:10px}
+.shape-btn[data-shape="square"]{border-radius:0}
+.upload-zone{border:2px dashed rgba(0,255,65,.3);border-radius:8px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;background:rgba(0,255,65,.03);position:relative;overflow:hidden}
+.upload-zone:hover,.upload-zone.drag-over{border-color:#00ff41;background:rgba(0,255,65,.07);box-shadow:0 0 18px rgba(0,255,65,.15) inset}
+.upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:32px;color:rgba(0,255,65,.5);margin-bottom:8px}
+.upload-text-main{font-family:'Orbitron',sans-serif;font-size:11px;color:#00ff41;letter-spacing:1px;margin-bottom:4px}
+.upload-text-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,65,.45)}
+.pic-controls{display:flex;flex-direction:column;gap:20px}
+.control-group label{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,65,.6);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:8px}
+.current-img-info{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(0,255,65,.05);border:1px solid rgba(0,255,65,.15);border-radius:4px}
+.current-img-thumb{width:36px;height:36px;object-fit:cover;border-radius:50%;border:1px solid rgba(0,255,65,.3)}
+.current-img-name{font-family:'Share Tech Mono',monospace;font-size:11px;color:#00ff41;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-remove-img{background:none;border:1px solid rgba(255,0,64,.4);color:#ff0040;font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 10px;cursor:pointer;transition:all .2s;letter-spacing:1px}
+.btn-remove-img:hover{background:rgba(255,0,64,.1);border-color:#ff0040}
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row span{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,65,.5);min-width:28px;text-align:right}
+.cyber-range{-webkit-appearance:none;flex:1;height:3px;background:rgba(0,255,65,.2);outline:none;border-radius:2px;cursor:pointer}
+.cyber-range::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#00ff41;box-shadow:0 0 8px rgba(0,255,65,.7);cursor:pointer}
+#upload-filename{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,65,.5);margin-top:6px;display:none}
+@media(max-width:700px){.pic-layout{grid-template-columns:1fr}.pic-preview-wrap{flex-direction:row;gap:20px;align-items:center}.pic-preview-ring{width:120px;height:120px;flex-shrink:0}}
+</style>
+</head>
+<body class="admin-panel-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand"><span class="bracket">[</span>ADMIN<span class="accent">_PANEL</span><span class="bracket">]</span></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="/admin/profile" class="sidebar-link active"><i class="fas fa-user-circle"></i> Profile</a>
+      <a href="/admin/projects" class="sidebar-link"><i class="fas fa-code"></i> Projects</a>
+      <a href="/admin/skills" class="sidebar-link"><i class="fas fa-tools"></i> Skills</a>
+      <a href="/admin/experience" class="sidebar-link"><i class="fas fa-briefcase"></i> Experience</a>
+      <a href="/admin/achievements" class="sidebar-link"><i class="fas fa-trophy"></i> Achievements</a>
+      <a href="/admin/certifications" class="sidebar-link"><i class="fas fa-certificate"></i> Certifications</a>
+      <a href="/admin/stats" class="sidebar-link"><i class="fas fa-chart-bar"></i> Stats</a>
+      <div class="sidebar-divider"></div>
+      <a href="/admin/messages" class="sidebar-link"><i class="fas fa-envelope"></i> Messages</a>
+      <div class="sidebar-divider"></div>
+      <a href="/" class="sidebar-link" target="_blank"><i class="fas fa-external-link-alt"></i> View Portfolio</a>
+      <a href="/admin/logout" class="sidebar-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title"><i class="fas fa-user-edit"></i> EDIT PROFILE</h1>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="/admin/profile" enctype="multipart/form-data" id="profile-form">
+
+      <!-- PROFILE PICTURE CUSTOMIZER -->
+      <div class="pic-customizer">
+        <h3><i class="fas fa-camera"></i> &nbsp;Profile Picture</h3>
+        <div class="pic-layout">
+
+          <!-- Live Preview -->
+          <div class="pic-preview-wrap">
+            <div class="pic-preview-ring" id="preview-ring">
+              <div class="ring-glow" id="ring-glow"></div>
+              <div class="ring-inner" id="ring-inner"></div>
+              <img id="profile-preview"
+                   src="{% if data.profile.profile_image %}{{ url_for('static', filename='images/' + data.profile.profile_image) }}{% else %}data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDBmZjQxIiBkeT0iLjNlbSI+QVM8L3RleHQ+PC9zdmc+{% endif %}"
+                   alt="Profile Preview">
+              <span class="preview-badge" id="preview-badge">NEW</span>
+            </div>
+            <div class="preview-label">Live Preview</div>
+          </div>
+
+          <!-- Controls -->
+          <div class="pic-controls">
+
+            {% if data.profile.profile_image %}
+            <div class="control-group" id="current-img-wrap">
+              <label>Current Image</label>
+              <div class="current-img-info">
+                <img class="current-img-thumb"
+                     src="{{ url_for('static', filename='images/' + data.profile.profile_image) }}"
+                     alt="current" onerror="this.style.display='none'">
+                <span class="current-img-name">{{ data.profile.profile_image }}</span>
+                <button type="button" class="btn-remove-img" id="btn-remove">
+                  <i class="fas fa-trash-alt"></i> REMOVE
+                </button>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Upload zone -->
+            <div class="control-group">
+              <label>Upload New Photo</label>
+              <div class="upload-zone" id="upload-zone">
+                <input type="file" name="profile_image" id="profile-image-input"
+                       accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml">
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div class="upload-text-main">DRAG &amp; DROP OR CLICK</div>
+                <div class="upload-text-sub">PNG &middot; JPG &middot; WEBP &middot; GIF &middot; SVG &nbsp;|&nbsp; Max 16 MB</div>
+              </div>
+              <div id="upload-filename"></div>
+            </div>
+
+            <!-- Frame Shape -->
+            <div class="control-group">
+              <label>Frame Shape</label>
+              <div class="shape-row">
+                <button type="button" class="shape-btn" data-shape="circle" title="Circle">&#9711;</button>
+                <button type="button" class="shape-btn" data-shape="rounded" title="Rounded">&#11036;</button>
+                <button type="button" class="shape-btn" data-shape="square" title="Square">&#9632;</button>
+              </div>
+              <input type="hidden" name="profile_shape" id="profile-shape-input"
+                     value="{{ data.profile.profile_shape|default('circle') }}">
+            </div>
+
+            <!-- Brightness -->
+            <div class="control-group">
+              <label>Brightness</label>
+              <div class="slider-row">
+                <span id="brightness-val">100</span>
+                <input type="range" class="cyber-range" id="brightness-slider" min="50" max="150" value="100">
+                <input type="hidden" name="profile_brightness" id="profile-brightness-input" value="100">
+              </div>
+            </div>
+
+            <!-- Contrast -->
+            <div class="control-group">
+              <label>Contrast</label>
+              <div class="slider-row">
+                <span id="contrast-val">100</span>
+                <input type="range" class="cyber-range" id="contrast-slider" min="50" max="150" value="100">
+                <input type="hidden" name="profile_contrast" id="profile-contrast-input" value="100">
+              </div>
+            </div>
+
+            <input type="hidden" name="remove_profile_image" id="remove-flag" value="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE INFO -->
+      <div class="admin-form-card">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-input" value="{{ data.profile.name }}" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Professional Title</label>
+            <input type="text" name="title" class="form-input" value="{{ data.profile.title }}" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" value="{{ data.profile.email }}" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-input" value="{{ data.profile.phone }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input type="text" name="location" class="form-input" value="{{ data.profile.location }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LinkedIn URL</label>
+            <input type="url" name="linkedin" class="form-input" value="{{ data.profile.linkedin }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">GitHub URL</label>
+            <input type="url" name="github" class="form-input" value="{{ data.profile.github }}">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Tagline</label>
+            <input type="text" name="tagline" class="form-input" value="{{ data.profile.tagline }}">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">About / Objective</label>
+            <textarea name="about" class="form-input form-textarea" rows="6">{{ data.profile.about }}</textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-cyber btn-primary">
+            <i class="fas fa-save"></i> SAVE CHANGES
+          </button>
+          <a href="/admin" class="btn-cyber btn-outline">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script>
+(function(){
+  var input      = document.getElementById('profile-image-input');
+  var preview    = document.getElementById('profile-preview');
+  var ringGlow   = document.getElementById('ring-glow');
+  var ringInner  = document.getElementById('ring-inner');
+  var badge      = document.getElementById('preview-badge');
+  var zone       = document.getElementById('upload-zone');
+  var fname      = document.getElementById('upload-filename');
+  var shapeIn    = document.getElementById('profile-shape-input');
+  var bSlider    = document.getElementById('brightness-slider');
+  var cSlider    = document.getElementById('contrast-slider');
+  var bVal       = document.getElementById('brightness-val');
+  var cVal       = document.getElementById('contrast-val');
+  var bIn        = document.getElementById('profile-brightness-input');
+  var cIn        = document.getElementById('profile-contrast-input');
+  var removeBtn  = document.getElementById('btn-remove');
+  var removeFlag = document.getElementById('remove-flag');
+
+  var PLACEHOLDER = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDBmZjQxIiBkeT0iLjNlbSI+QVM8L3RleHQ+PC9zdmc+';
+
+  var SHAPES = { circle:'50%', rounded:'16px', square:'0px' };
+  var currentShape = shapeIn.value || 'circle';
+
+  function applyShape(s) {
+    currentShape = s;
+    var r = SHAPES[s] || '50%';
+    preview.style.borderRadius = r;
+    ringGlow.style.borderRadius = r;
+    ringInner.style.borderRadius = r;
+    shapeIn.value = s;
+    document.querySelectorAll('.shape-btn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.shape === s);
+    });
+  }
+  applyShape(currentShape);
+
+  document.querySelectorAll('.shape-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ applyShape(btn.dataset.shape); });
+  });
+
+  function applyFilter(){
+    var b = bSlider.value, c = cSlider.value;
+    preview.style.filter = 'brightness('+b+'%) contrast('+c+'%)';
+    bVal.textContent = b; cVal.textContent = c;
+    bIn.value = b; cIn.value = c;
+  }
+  bSlider.addEventListener('input', applyFilter);
+  cSlider.addEventListener('input', applyFilter);
+
+  function handleFile(file){
+    if(!file || !file.type.startsWith('image/')) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      preview.src = e.target.result;
+      badge.style.display = 'block';
+      fname.textContent = '\u2713  ' + file.name;
+      fname.style.display = 'block';
+      removeFlag.value = '0';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  input.addEventListener('change', function(){ handleFile(input.files[0]); });
+
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', function(){ zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', function(e){
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    var f = e.dataTransfer.files[0];
+    if(f){
+      var dt = new DataTransfer();
+      dt.items.add(f);
+      input.files = dt.files;
+      handleFile(f);
+    }
+  });
+
+  if(removeBtn){
+    removeBtn.addEventListener('click', function(){
+      preview.src = PLACEHOLDER;
+      removeFlag.value = '1';
+      badge.style.display = 'none';
+      var wrap = document.getElementById('current-img-wrap');
+      if(wrap){ wrap.style.opacity='0.4'; removeBtn.disabled=true; }
+    });
+  }
+})();
+</script>
+</body>
+</html>

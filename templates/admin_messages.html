@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages | Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  .msg-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+    transition: all .3s;
+    position: relative;
+  }
+  .msg-card.unread { border-left: 3px solid var(--green); }
+  .msg-card:hover { border-color: var(--green); box-shadow: var(--glow); }
+
+  .msg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .9rem 1.2rem;
+    background: rgba(0,255,65,.04);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .msg-sender { display: flex; align-items: center; gap: .8rem; }
+  .msg-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green-dark), var(--green));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 1rem;
+    color: var(--bg-dark);
+    flex-shrink: 0;
+  }
+  .msg-name { font-weight: 700; color: white; font-size: .95rem; }
+  .msg-email { font-family: var(--font-mono); font-size: .78rem; color: var(--green); }
+  .msg-meta { display: flex; align-items: center; gap: 1rem; }
+  .msg-time { font-family: var(--font-mono); font-size: .75rem; color: var(--text-dim); }
+  .unread-badge {
+    padding: .15rem .5rem;
+    background: var(--green);
+    color: var(--bg-dark);
+    font-size: .65rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    border-radius: 20px;
+  }
+  .msg-subject {
+    padding: .6rem 1.2rem;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+  }
+  .msg-subject span { color: var(--green); }
+  .msg-body {
+    padding: 1rem 1.2rem;
+    color: var(--text);
+    font-size: .92rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg-actions {
+    padding: .7rem 1.2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: .8rem;
+    align-items: center;
+    background: rgba(0,0,0,.15);
+  }
+  .btn-reply {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .4rem 1rem;
+    background: rgba(0,255,65,.08);
+    border: 1px solid var(--border);
+    color: var(--green);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    text-decoration: none;
+    transition: all .2s;
+  }
+  .btn-reply:hover { background: rgba(0,255,65,.18); box-shadow: var(--glow); }
+
+  .inbox-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .inbox-count {
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    color: var(--text-dim);
+  }
+  .inbox-count strong { color: var(--green); }
+
+  .empty-inbox {
+    text-align: center;
+    padding: 4rem 2rem;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    background: rgba(0,255,65,.02);
+  }
+  .empty-icon { font-size: 4rem; margin-bottom: 1rem; opacity: .4; }
+  .empty-text { font-family: var(--font-mono); color: var(--text-dim); font-size: .9rem; }
+</style>
+</head>
+<body class="admin-panel-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand"><span class="bracket">[</span>ADMIN<span class="accent">_PANEL</span><span class="bracket">]</span></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="/admin/profile" class="sidebar-link"><i class="fas fa-user-circle"></i> Profile</a>
+      <a href="/admin/projects" class="sidebar-link"><i class="fas fa-code"></i> Projects</a>
+      <a href="/admin/skills" class="sidebar-link"><i class="fas fa-tools"></i> Skills</a>
+      <a href="/admin/experience" class="sidebar-link"><i class="fas fa-briefcase"></i> Experience</a>
+      <a href="/admin/achievements" class="sidebar-link"><i class="fas fa-trophy"></i> Achievements</a>
+      <a href="/admin/certifications" class="sidebar-link"><i class="fas fa-certificate"></i> Certifications</a>
+      <a href="/admin/stats" class="sidebar-link"><i class="fas fa-chart-bar"></i> Stats</a>
+      <a href="/admin/messages" class="sidebar-link active"><i class="fas fa-envelope"></i> Messages</a>
+      <div class="sidebar-divider"></div>
+      <a href="/" class="sidebar-link" target="_blank"><i class="fas fa-external-link-alt"></i> View Portfolio</a>
+      <a href="/admin/logout" class="sidebar-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title"><i class="fas fa-envelope"></i> MESSAGE INBOX</h1>
+      <div class="admin-user"><span class="status-dot"></span> Abubakkar Siddiq</div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div style="padding: 2rem;">
+
+      <div class="inbox-toolbar">
+        <div class="inbox-count">
+          Total: <strong>{{ msgs|length }}</strong> message{{ 's' if msgs|length != 1 else '' }}
+          {% set unread = msgs|selectattr('read', 'equalto', false)|list|length %}
+          {% if unread > 0 %}
+            &nbsp;·&nbsp; <strong style="color:var(--green)">{{ unread }} unread</strong>
+          {% endif %}
+        </div>
+        {% if msgs %}
+        <form method="POST" action="/admin/messages/delete_all"
+              onsubmit="return confirm('Delete ALL messages? This cannot be undone.')">
+          <button type="submit" class="btn-cyber btn-outline" style="font-size:.8rem;padding:.5rem 1rem;">
+            <i class="fas fa-trash-alt"></i> Clear All
+          </button>
+        </form>
+        {% endif %}
+      </div>
+
+      {% if msgs %}
+        {% for msg in msgs %}
+        <div class="msg-card {% if not msg.read %}unread{% endif %}">
+          <div class="msg-header">
+            <div class="msg-sender">
+              <div class="msg-avatar">{{ msg.name[0].upper() }}</div>
+              <div>
+                <div class="msg-name">{{ msg.name }}
+                  {% if not msg.read %}<span class="unread-badge">NEW</span>{% endif %}
+                </div>
+                <div class="msg-email">{{ msg.email }}</div>
+              </div>
+            </div>
+            <div class="msg-meta">
+              <span class="msg-time"><i class="fas fa-clock"></i> {{ msg.timestamp }}</span>
+            </div>
+          </div>
+
+          <div class="msg-subject">
+            <span>// subject:</span> {{ msg.subject }}
+          </div>
+
+          <div class="msg-body">{{ msg.message }}</div>
+
+          <div class="msg-actions">
+            <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}" class="btn-reply">
+              <i class="fas fa-reply"></i> Reply via Email
+            </a>
+            <form method="POST" action="/admin/messages/delete/{{ msg.id }}" style="margin:0">
+              <button type="submit" class="btn-delete"
+                      onclick="return confirm('Delete this message?')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+
+      {% else %}
+        <div class="empty-inbox">
+          <div class="empty-icon">📭</div>
+          <div class="empty-text">No messages yet.<br>When someone uses the contact form, their message will appear here.</div>
+        </div>
+      {% endif %}
+
+    </div>
+  </main>
+</div>
+</body>
+</html>

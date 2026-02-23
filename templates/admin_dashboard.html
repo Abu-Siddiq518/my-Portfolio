@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Portfolio</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-panel-body">
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <span class="bracket">[</span>ADMIN<span class="accent">_PANEL</span><span class="bracket">]</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link active">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+      </a>
+      <a href="/admin/profile" class="sidebar-link">
+        <i class="fas fa-user-circle"></i> Profile
+      </a>
+      <a href="/admin/projects" class="sidebar-link">
+        <i class="fas fa-code"></i> Projects
+      </a>
+      <a href="/admin/achievements" class="sidebar-link">
+        <i class="fas fa-trophy"></i> Achievements
+      </a>
+      <a href="/admin/certifications" class="sidebar-link">
+        <i class="fas fa-certificate"></i> Certifications
+      </a>
+      <a href="/admin/stats" class="sidebar-link">
+        <i class="fas fa-chart-bar"></i> Stats
+      </a>
+      <div class="sidebar-divider"></div>
+      <a href="/" class="sidebar-link" target="_blank">
+        <i class="fas fa-external-link-alt"></i> View Portfolio
+      </a>
+      <a href="/admin/logout" class="sidebar-link logout">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title"><i class="fas fa-tachometer-alt"></i> CONTROL CENTER</h1>
+      <div class="admin-user">
+        <span class="status-dot"></span>
+        <span>Abubakkar Siddiq</span>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- Stats Cards -->
+    <div class="admin-stats-grid" style="grid-template-columns:repeat(5,1fr);">
+      <div class="admin-stat-card">
+        <div class="asc-icon">🔍</div>
+        <div class="asc-num">{{ data.stats.vulnerabilities_found }}</div>
+        <div class="asc-label">Vulnerabilities Found</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="asc-icon">🏆</div>
+        <div class="asc-num">{{ data.achievements|length }}</div>
+        <div class="asc-label">Achievements</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="asc-icon">📁</div>
+        <div class="asc-num">{{ data.projects|length }}</div>
+        <div class="asc-label">Projects</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="asc-icon">🏅</div>
+        <div class="asc-num">{{ data.certifications|length }}</div>
+        <div class="asc-label">Certifications</div>
+      </div>
+      <a href="/admin/messages" class="admin-stat-card" style="text-decoration:none;position:relative;">
+        <div class="asc-icon">📨</div>
+        <div class="asc-num">{{ msgs|length }}</div>
+        <div class="asc-label">Messages</div>
+        {% if unread > 0 %}
+        <span style="position:absolute;top:.8rem;right:.8rem;background:var(--green);color:var(--bg-dark);font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:20px;">
+          {{ unread }} NEW
+        </span>
+        {% endif %}
+      </a>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2 class="section-sub-title">QUICK ACTIONS</h2>
+      <div class="action-grid">
+        <a href="/admin/profile" class="action-card">
+          <i class="fas fa-user-edit"></i>
+          <span>Edit Profile</span>
+        </a>
+        <a href="/admin/projects" class="action-card">
+          <i class="fas fa-plus-circle"></i>
+          <span>Add Project</span>
+        </a>
+        <a href="/admin/skills" class="action-card">
+          <i class="fas fa-tools"></i>
+          <span>Edit Skills</span>
+        </a>
+        <a href="/admin/experience" class="action-card">
+          <i class="fas fa-briefcase"></i>
+          <span>Experience</span>
+        </a>
+        <a href="/admin/achievements" class="action-card">
+          <i class="fas fa-trophy"></i>
+          <span>Add Achievement</span>
+        </a>
+        <a href="/admin/certifications" class="action-card">
+          <i class="fas fa-certificate"></i>
+          <span>Add Certificate</span>
+        </a>
+        <a href="/admin/stats" class="action-card">
+          <i class="fas fa-edit"></i>
+          <span>Update Stats</span>
+        </a>
+        <a href="/admin/messages" class="action-card" style="position:relative;">
+          <i class="fas fa-envelope"></i>
+          <span>Inbox{% if unread > 0 %} ({{ unread }}){% endif %}</span>
+        </a>
+        <a href="/" target="_blank" class="action-card">
+          <i class="fas fa-eye"></i>
+          <span>Preview Site</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- What to Add Guide -->
+    <div class="guide-box">
+      <h2 class="section-sub-title">📋 PERFECT PORTFOLIO CHECKLIST</h2>
+      <div class="checklist">
+        <div class="check-item">✅ Profile photo – Add <code>profile.jpg</code> in <code>static/images/</code></div>
+        <div class="check-item">✅ Certificate images – Add <code>cert1.jpg, cert2.jpg...</code> in <code>static/images/</code></div>
+        <div class="check-item">✅ Achievement photos – Add <code>ach1.jpg, ach2.jpg...</code> in <code>static/images/</code></div>
+        <div class="check-item">✅ Project screenshots – Add <code>project1.jpg...</code> in <code>static/images/</code></div>
+        <div class="check-item">🔲 Add TryHackMe profile link</div>
+        <div class="check-item">🔲 Add GitHub with security repos</div>
+        <div class="check-item">🔲 Add PortSwigger Web Security Academy profile</div>
+        <div class="check-item">🔲 Upload your resume PDF</div>
+        <div class="check-item">🔲 Add more CTF writeups</div>
+        <div class="check-item">🔲 Add LinkedIn recommendations</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

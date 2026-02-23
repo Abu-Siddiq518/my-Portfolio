@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stats | Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-panel-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand"><span class="bracket">[</span>ADMIN<span class="accent">_PANEL</span><span class="bracket">]</span></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="/admin/profile" class="sidebar-link"><i class="fas fa-user-circle"></i> Profile</a>
+      <a href="/admin/projects" class="sidebar-link"><i class="fas fa-code"></i> Projects</a>
+      <a href="/admin/skills" class="sidebar-link"><i class="fas fa-tools"></i> Skills</a>
+      <a href="/admin/experience" class="sidebar-link"><i class="fas fa-briefcase"></i> Experience</a>
+      <a href="/admin/achievements" class="sidebar-link"><i class="fas fa-trophy"></i> Achievements</a>
+      <a href="/admin/certifications" class="sidebar-link"><i class="fas fa-certificate"></i> Certifications</a>
+      <a href="/admin/stats" class="sidebar-link active"><i class="fas fa-chart-bar"></i> Stats</a>
+      <div class="sidebar-divider"></div>
+      <a href="/admin/messages" class="sidebar-link"><i class="fas fa-envelope"></i> Messages</a>
+      <div class="sidebar-divider"></div>
+      <a href="/" class="sidebar-link" target="_blank"><i class="fas fa-external-link-alt"></i> View Portfolio</a>
+      <a href="/admin/logout" class="sidebar-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title"><i class="fas fa-chart-bar"></i> STATS MANAGER</h1>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    <div class="admin-form-card">
+      <h3 class="form-section-title">UPDATE PORTFOLIO STATS</h3>
+      <form method="POST" action="/admin/stats">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">🔍 Vulnerabilities Found</label>
+            <input type="number" name="vulnerabilities_found" class="form-input" value="{{ data.stats.vulnerabilities_found }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">⚔️ CTF Challenges Solved</label>
+            <input type="number" name="ctf_solved" class="form-input" value="{{ data.stats.ctf_solved }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">🏅 Total Certifications</label>
+            <input type="number" name="certifications" class="form-input" value="{{ data.stats.certifications }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">📁 Total Projects</label>
+            <input type="number" name="projects" class="form-input" value="{{ data.stats.projects }}">
+          </div>
+        </div>
+        <button type="submit" class="btn-cyber btn-primary"><i class="fas fa-save"></i> UPDATE STATS</button>
+      </form>
+    </div>
+  </main>
+</div>
+</body>
+</html>

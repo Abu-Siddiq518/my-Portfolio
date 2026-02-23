@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN ACCESS | Cybersecurity Portfolio</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+<canvas id="matrix-canvas"></canvas>
+<div class="scanlines"></div>
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="lock-icon">🔐</div>
+      <h1 class="login-title">ADMIN <span class="accent">ACCESS</span></h1>
+      <div class="login-subtitle">AUTHORIZED PERSONNEL ONLY</div>
+      <div class="access-bar">
+        <div class="access-progress" id="accessBar"></div>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {% if category == 'error' %}⚠️{% else %}✅{% endif %} {{ message }}
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="/admin/login" class="login-form">
+      <div class="form-group">
+        <label class="form-label">
+          <i class="fas fa-key"></i> // ACCESS_CODE
+        </label>
+        <div class="input-wrap">
+          <input type="password" name="password" class="form-input login-input" 
+                 placeholder="Enter access code..." required autocomplete="off">
+          <button type="button" class="toggle-pass" onclick="togglePassword()">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-cyber btn-primary full-width login-btn">
+        <i class="fas fa-terminal"></i> AUTHENTICATE
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Return to Portfolio</a>
+    </div>
+
+    <div class="security-info">
+      <div class="sec-badge">🛡️ SSL SECURED</div>
+      <div class="sec-badge">🔒 ENCRYPTED</div>
+      <div class="sec-badge">⚡ MONITORED</div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+function togglePassword() {
+  const input = document.querySelector('.login-input');
+  const icon = document.getElementById('eyeIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.replace('fa-eye', 'fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.replace('fa-eye-slash', 'fa-eye');
+  }
+}
+// Animate access bar
+setTimeout(() => {
+  const bar = document.getElementById('accessBar');
+  if (bar) bar.style.width = '75%';
+}, 500);
+</script>
+</body>
+</html>

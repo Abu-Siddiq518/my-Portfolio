@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills | Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.edit-panel{display:none;margin-top:1rem;padding:1.2rem;border:1px solid var(--green);border-radius:6px;background:rgba(0,255,65,.03);}
+.edit-panel.open{display:block;}
+.skill-row{border:1px solid var(--border);border-radius:8px;background:var(--bg-card);margin-bottom:1rem;overflow:hidden;transition:border-color .2s;}
+.skill-row:hover{border-color:rgba(0,255,65,.4);}
+.skill-row-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;gap:1rem;flex-wrap:wrap;}
+.skill-row-info{display:flex;align-items:center;gap:1rem;flex:1;min-width:0;}
+.skill-cat-icon{font-size:1.6rem;flex-shrink:0;}
+.skill-cat-name{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:var(--green);}
+.skill-tags-preview{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem;}
+.stag{padding:.15rem .5rem;background:rgba(0,255,65,.08);border:1px solid rgba(0,255,65,.2);border-radius:3px;font-family:var(--font-mono);font-size:.72rem;color:var(--text-dim);}
+.skill-row-actions{display:flex;gap:.6rem;flex-shrink:0;}
+.btn-edit-toggle{padding:.45rem 1rem;background:rgba(0,180,255,.1);border:1px solid rgba(0,180,255,.4);color:#00b4ff;border-radius:4px;font-family:var(--font-mono);font-size:.78rem;cursor:pointer;transition:all .2s;}
+.btn-edit-toggle:hover{background:rgba(0,180,255,.2);}
+.btn-edit-toggle.active{background:rgba(0,255,65,.1);border-color:var(--green);color:var(--green);}
+.hint{font-family:var(--font-mono);font-size:.75rem;color:var(--text-dim);margin-top:.3rem;}
+.hint span{color:var(--green);}
+.icon-grid{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem;}
+.icon-btn{width:36px;height:36px;font-size:1.2rem;border:1px solid var(--border);border-radius:4px;background:var(--bg-panel);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.icon-btn:hover{border-color:var(--green);background:rgba(0,255,65,.1);}
+</style>
+</head>
+<body class="admin-panel-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand"><span class="bracket">[</span>ADMIN<span class="accent">_PANEL</span><span class="bracket">]</span></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="/admin/profile" class="sidebar-link"><i class="fas fa-user-circle"></i> Profile</a>
+      <a href="/admin/projects" class="sidebar-link"><i class="fas fa-code"></i> Projects</a>
+      <a href="/admin/skills" class="sidebar-link active"><i class="fas fa-tools"></i> Skills</a>
+      <a href="/admin/experience" class="sidebar-link"><i class="fas fa-briefcase"></i> Experience</a>
+      <a href="/admin/achievements" class="sidebar-link"><i class="fas fa-trophy"></i> Achievements</a>
+      <a href="/admin/certifications" class="sidebar-link"><i class="fas fa-certificate"></i> Certifications</a>
+      <a href="/admin/stats" class="sidebar-link"><i class="fas fa-chart-bar"></i> Stats</a>
+      <a href="/admin/messages" class="sidebar-link"><i class="fas fa-envelope"></i> Messages</a>
+      <div class="sidebar-divider"></div>
+      <a href="/" class="sidebar-link" target="_blank"><i class="fas fa-external-link-alt"></i> View Portfolio</a>
+      <a href="/admin/logout" class="sidebar-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title"><i class="fas fa-tools"></i> SKILLS MANAGER</h1>
+      <div class="admin-user"><span class="status-dot"></span> Abubakkar Siddiq</div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" style="margin:1rem 2rem 0;">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- ADD NEW CATEGORY -->
+    <div class="admin-form-card">
+      <h3 class="form-section-title">➕ ADD NEW SKILL CATEGORY</h3>
+      <form method="POST" action="/admin/skills">
+        <input type="hidden" name="action" value="add_category">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Category Name *</label>
+            <input type="text" name="category_name" class="form-input"
+                   placeholder="e.g. Cloud Security" required>
+            <div class="hint">e.g. <span>Penetration Testing</span>, <span>SOC Tools</span>, <span>Frameworks</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Icon (Emoji)</label>
+            <input type="text" name="category_icon" id="cat_icon_input" class="form-input"
+                   placeholder="🛡️" maxlength="4">
+            <div class="icon-grid">
+              {% for ico in ['🕷️','🛠️','🔍','🖥️','🔬','🐧','💻','🧠','🛡️','⚔️','🔐','☁️','🌐','📡','🔑','🧪','🚀','💡'] %}
+              <button type="button" class="icon-btn" onclick="document.getElementById('cat_icon_input').value='{{ ico }}'">{{ ico }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Skills List *</label>
+            <input type="text" name="skills_list" class="form-input"
+                   placeholder="Burp Suite, OWASP ZAP, Nmap, SQLMap" required>
+            <div class="hint">Separate each skill with a <span>comma</span></div>
+          </div>
+        </div>
+        <button type="submit" class="btn-cyber btn-primary" style="margin-top:.5rem;">
+          <i class="fas fa-plus"></i> ADD CATEGORY
+        </button>
+      </form>
+    </div>
+
+    <!-- EXISTING SKILL CATEGORIES -->
+    <div class="admin-form-card">
+      <h3 class="form-section-title">🛠️ EXISTING SKILL CATEGORIES
+        <span style="color:var(--text-dim);font-size:.8rem;font-weight:400;margin-left:.5rem;">
+          {{ data.skills|length }} categories — click Edit to modify
+        </span>
+      </h3>
+
+      {% set icons = ['🕷️','🛠️','🔍','🖥️','🔬','🐧','💻','🧠','🛡️','⚔️','🔐','☁️','🌐','📡','🔑','🧪','🚀','💡'] %}
+
+      {% for category, items in data.skills.items() %}
+      <div class="skill-row">
+        <div class="skill-row-header">
+          <div class="skill-row-info">
+            <span class="skill-cat-icon">
+              {% if 'Penetration' in category %}🕷️
+              {% elif 'Security Tools' in category %}🛠️
+              {% elif 'Vulnerability' in category %}🔍
+              {% elif 'SOC' in category %}🖥️
+              {% elif 'Forensics' in category %}🔬
+              {% elif 'Operating' in category %}🐧
+              {% elif 'Programming' in category %}💻
+              {% else %}🧠{% endif %}
+            </span>
+            <div>
+              <div class="skill-cat-name">{{ category }}</div>
+              <div class="skill-tags-preview">
+                {% for item in items[:6] %}
+                  <span class="stag">{{ item }}</span>
+                {% endfor %}
+                {% if items|length > 6 %}
+                  <span class="stag">+{{ items|length - 6 }} more</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="skill-row-actions">
+            <button type="button" class="btn-edit-toggle" id="toggle-skill-{{ loop.index0 }}"
+                    onclick="toggleEdit('skill', {{ loop.index0 }})">
+              <i class="fas fa-pen"></i> Edit
+            </button>
+            <form method="POST" action="/admin/skills" style="margin:0">
+              <input type="hidden" name="action" value="delete_category">
+              <input type="hidden" name="category_name" value="{{ category }}">
+              <button type="submit" class="btn-delete"
+                      onclick="return confirm('Delete entire category &quot;{{ category }}&quot;?')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- EDIT PANEL -->
+        <div class="edit-panel" id="edit-skill-{{ loop.index0 }}">
+          <form method="POST" action="/admin/skills">
+            <input type="hidden" name="action" value="edit_category">
+            <input type="hidden" name="old_name" value="{{ category }}">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Category Name *</label>
+                <input type="text" name="category_name" class="form-input"
+                       value="{{ category }}" required>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Skills List *</label>
+                <input type="text" name="skills_list" class="form-input"
+                       value="{{ items | join(', ') }}" required>
+                <div class="hint">Separate each skill with a <span>comma</span>. Order matters — shown left to right.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:.8rem;margin-top:.8rem;">
+              <button type="submit" class="btn-cyber btn-primary" style="font-size:.85rem;">
+                <i class="fas fa-save"></i> SAVE CHANGES
+              </button>
+              <button type="button" class="btn-cyber btn-outline" style="font-size:.85rem;"
+                      onclick="toggleEdit('skill', {{ loop.index0 }})">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
+</div>
+
+<script>
+function toggleEdit(prefix, idx) {
+  const panel = document.getElementById('edit-' + prefix + '-' + idx);
+  const btn   = document.getElementById('toggle-' + prefix + '-' + idx);
+  const open  = panel.classList.contains('open');
+  document.querySelectorAll('.edit-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.btn-edit-toggle').forEach(b => { b.classList.remove('active'); b.innerHTML = '<i class="fas fa-pen"></i> Edit'; });
+  if (!open) {
+    panel.classList.add('open');
+    btn.classList.add('active');
+    btn.innerHTML = '<i class="fas fa-times"></i> Close';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+</script>
+</body>
+</html>

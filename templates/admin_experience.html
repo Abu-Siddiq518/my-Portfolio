@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience | Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.edit-panel{display:none;margin-top:1rem;padding:1.2rem;border:1px solid var(--green);border-radius:6px;background:rgba(0,255,65,.03);}
+.edit-panel.open{display:block;}
+.exp-row{border:1px solid var(--border);border-radius:8px;background:var(--bg-card);margin-bottom:1rem;overflow:hidden;transition:border-color .2s;position:relative;}
+.exp-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green);}
+.exp-row:hover{border-color:rgba(0,255,65,.5);box-shadow:var(--glow);}
+.exp-row-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem 1rem 1.6rem;gap:1rem;flex-wrap:wrap;}
+.exp-row-info{flex:1;min-width:0;}
+.exp-company{font-family:var(--font-display);font-size:1rem;font-weight:700;color:white;margin-bottom:.2rem;}
+.exp-role{font-family:var(--font-mono);font-size:.82rem;color:var(--green);margin-bottom:.3rem;}
+.exp-meta{display:flex;gap:1rem;flex-wrap:wrap;}
+.exp-badge{padding:.15rem .6rem;background:rgba(0,255,65,.1);border:1px solid rgba(0,255,65,.3);border-radius:20px;font-size:.7rem;font-family:var(--font-mono);color:var(--green);}
+.exp-period{font-family:var(--font-mono);font-size:.75rem;color:var(--text-dim);}
+.exp-loc{font-family:var(--font-mono);font-size:.75rem;color:var(--text-dim);}
+.exp-row-actions{display:flex;gap:.6rem;flex-shrink:0;}
+.btn-edit-toggle{padding:.45rem 1rem;background:rgba(0,180,255,.1);border:1px solid rgba(0,180,255,.4);color:#00b4ff;border-radius:4px;font-family:var(--font-mono);font-size:.78rem;cursor:pointer;transition:all .2s;}
+.btn-edit-toggle:hover{background:rgba(0,180,255,.2);}
+.btn-edit-toggle.active{background:rgba(0,255,65,.1);border-color:var(--green);color:var(--green);}
+.hint{font-family:var(--font-mono);font-size:.75rem;color:var(--text-dim);margin-top:.3rem;}
+.hint span{color:var(--green);}
+.points-preview{padding:.5rem 1.2rem 1rem 1.6rem;}
+.point-line{display:flex;gap:.5rem;font-size:.85rem;color:var(--text-dim);margin-bottom:.25rem;}
+.point-arrow{color:var(--green);font-size:.7rem;margin-top:.25rem;flex-shrink:0;}
+select.form-input{appearance:none;cursor:pointer;}
+</style>
+</head>
+<body class="admin-panel-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand"><span class="bracket">[</span>ADMIN<span class="accent">_PANEL</span><span class="bracket">]</span></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="/admin/profile" class="sidebar-link"><i class="fas fa-user-circle"></i> Profile</a>
+      <a href="/admin/projects" class="sidebar-link"><i class="fas fa-code"></i> Projects</a>
+      <a href="/admin/skills" class="sidebar-link"><i class="fas fa-tools"></i> Skills</a>
+      <a href="/admin/experience" class="sidebar-link active"><i class="fas fa-briefcase"></i> Experience</a>
+      <a href="/admin/achievements" class="sidebar-link"><i class="fas fa-trophy"></i> Achievements</a>
+      <a href="/admin/certifications" class="sidebar-link"><i class="fas fa-certificate"></i> Certifications</a>
+      <a href="/admin/stats" class="sidebar-link"><i class="fas fa-chart-bar"></i> Stats</a>
+      <a href="/admin/messages" class="sidebar-link"><i class="fas fa-envelope"></i> Messages</a>
+      <div class="sidebar-divider"></div>
+      <a href="/" class="sidebar-link" target="_blank"><i class="fas fa-external-link-alt"></i> View Portfolio</a>
+      <a href="/admin/logout" class="sidebar-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title"><i class="fas fa-briefcase"></i> EXPERIENCE MANAGER</h1>
+      <div class="admin-user"><span class="status-dot"></span> Abubakkar Siddiq</div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" style="margin:1rem 2rem 0;">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- ADD NEW EXPERIENCE -->
+    <div class="admin-form-card">
+      <h3 class="form-section-title">➕ ADD NEW EXPERIENCE</h3>
+      <form method="POST" action="/admin/experience">
+        <input type="hidden" name="action" value="add">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Job Role / Position *</label>
+            <input type="text" name="role" class="form-input"
+                   placeholder="e.g. Security Tester" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company / Organisation *</label>
+            <input type="text" name="company" class="form-input"
+                   placeholder="e.g. Vimix Technologies LLP" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <select name="type" class="form-input">
+              <option value="Internship">Internship</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Freelance">Freelance</option>
+              <option value="Contract">Contract</option>
+              <option value="Research">Research</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Period *</label>
+            <input type="text" name="period" class="form-input"
+                   placeholder="Jan 2026 – Present" required>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Location</label>
+            <input type="text" name="location" class="form-input"
+                   placeholder="Coimbatore, Tamil Nadu, India">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Key Responsibilities / Points *</label>
+            <textarea name="points" class="form-input form-textarea" rows="6"
+                      placeholder="Performing real-world application security testing&#10;Conducting penetration testing to assess security risks&#10;Identified 10 vulnerabilities in a Django-based web app&#10;Skills: Burp Suite, Cloud Computing, OWASP Top 10" required></textarea>
+            <div class="hint">Enter <span>one point per line</span>. Each line becomes a bullet point on the portfolio.</div>
+          </div>
+        </div>
+        <button type="submit" class="btn-cyber btn-primary" style="margin-top:.5rem;">
+          <i class="fas fa-plus"></i> ADD EXPERIENCE
+        </button>
+      </form>
+    </div>
+
+    <!-- EXISTING EXPERIENCES -->
+    <div class="admin-form-card">
+      <h3 class="form-section-title">💼 EXISTING EXPERIENCE
+        <span style="color:var(--text-dim);font-size:.8rem;font-weight:400;margin-left:.5rem;">
+          {{ data.experience|length }} entries — click Edit to modify
+        </span>
+      </h3>
+
+      {% for exp in data.experience %}
+      <div class="exp-row">
+        <div class="exp-row-header">
+          <div class="exp-row-info">
+            <div class="exp-company">{{ exp.company }}</div>
+            <div class="exp-role">{{ exp.role }}</div>
+            <div class="exp-meta">
+              <span class="exp-badge">{{ exp.type }}</span>
+              <span class="exp-period"><i class="fas fa-calendar-alt"></i> {{ exp.period }}</span>
+              <span class="exp-loc"><i class="fas fa-map-marker-alt"></i> {{ exp.location }}</span>
+            </div>
+          </div>
+          <div class="exp-row-actions">
+            <button type="button" class="btn-edit-toggle" id="toggle-exp-{{ loop.index0 }}"
+                    onclick="toggleEdit('exp', {{ loop.index0 }})">
+              <i class="fas fa-pen"></i> Edit
+            </button>
+            <form method="POST" action="/admin/experience" style="margin:0">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="index" value="{{ loop.index0 }}">
+              <button type="submit" class="btn-delete"
+                      onclick="return confirm('Delete this experience entry?')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Points preview -->
+        <div class="points-preview">
+          {% for point in exp.points[:3] %}
+          <div class="point-line">
+            <span class="point-arrow">▶</span>
+            <span>{{ point }}</span>
+          </div>
+          {% endfor %}
+          {% if exp.points|length > 3 %}
+          <div class="point-line" style="color:var(--text-dim);font-style:italic;">
+            <span class="point-arrow">▶</span>
+            <span>+{{ exp.points|length - 3 }} more points...</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- EDIT PANEL -->
+        <div class="edit-panel" id="edit-exp-{{ loop.index0 }}">
+          <form method="POST" action="/admin/experience">
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="index" value="{{ loop.index0 }}">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Job Role / Position *</label>
+                <input type="text" name="role" class="form-input"
+                       value="{{ exp.role }}" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Company / Organisation *</label>
+                <input type="text" name="company" class="form-input"
+                       value="{{ exp.company }}" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Type</label>
+                <select name="type" class="form-input">
+                  {% for t in ['Internship','Full-time','Part-time','Freelance','Contract','Research'] %}
+                  <option value="{{ t }}" {% if exp.type == t %}selected{% endif %}>{{ t }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Period *</label>
+                <input type="text" name="period" class="form-input"
+                       value="{{ exp.period }}" required>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Location</label>
+                <input type="text" name="location" class="form-input"
+                       value="{{ exp.location }}">
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Key Responsibilities / Points *</label>
+                <textarea name="points" class="form-input form-textarea" rows="7" required>{{ exp.points | join('\n') }}</textarea>
+                <div class="hint">One point per line — each line = one bullet on portfolio</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:.8rem;margin-top:.8rem;">
+              <button type="submit" class="btn-cyber btn-primary" style="font-size:.85rem;">
+                <i class="fas fa-save"></i> SAVE CHANGES
+              </button>
+              <button type="button" class="btn-cyber btn-outline" style="font-size:.85rem;"
+                      onclick="toggleEdit('exp', {{ loop.index0 }})">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% else %}
+        <p style="color:var(--text-dim);font-family:var(--font-mono);font-size:.85rem;padding:1rem 0;">
+          No experience entries yet. Add your first one above!
+        </p>
+      {% endfor %}
+    </div>
+  </main>
+</div>
+
+<script>
+function toggleEdit(prefix, idx) {
+  const panel = document.getElementById('edit-' + prefix + '-' + idx);
+  const btn   = document.getElementById('toggle-' + prefix + '-' + idx);
+  const open  = panel.classList.contains('open');
+  document.querySelectorAll('.edit-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.btn-edit-toggle').forEach(b => {
+    b.classList.remove('active');
+    b.innerHTML = '<i class="fas fa-pen"></i> Edit';
+  });
+  if (!open) {
+    panel.classList.add('open');
+    btn.classList.add('active');
+    btn.innerHTML = '<i class="fas fa-times"></i> Close';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+</script>
+</body>
+</html>

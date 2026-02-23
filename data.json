@@ -1,0 +1,283 @@
+{
+  "profile": {
+    "name": "Abubakkar Siddiq A",
+    "title": "Cybersecurity Professional | Penetration Tester",
+    "tagline": "Securing the Digital World, One Vulnerability at a Time",
+    "about": "Cybersecurity Professional with hands-on penetration testing experience at Vimix Technologies and HackupTechnology. Skilled in identifying and mitigating OWASP Top 10 vulnerabilities using Burp Suite, OWASP ZAP, Nmap, and SQLMap. Proven track record of conducting real-world VAPT on web applications and cloud environments, with strong expertise in exploit development, CTF challenges, and secure coding practices.",
+    "email": "abubakkarsiddiq123as@gmail.com",
+    "phone": "+91-8489843737",
+    "location": "Coimbatore, Tamil Nadu, India",
+    "linkedin": "https://www.linkedin.com/in/abubakkar-siddiq-a-78583b309/",
+    "github": "https://github.com/abubakkarsiddiq",
+    "profile_image": "Screenshot_20251030-193429-removebg.png",
+    "resume_url": "#",
+    "profile_shape": "rounded",
+    "profile_brightness": 100,
+    "profile_contrast": 100
+  },
+  "education": [
+    {
+      "degree": "B.Tech - Information Technology",
+      "institution": "Kongunadu College of Engineering and Technology",
+      "period": "2022 \u2013 2026",
+      "score": "CGPA: 8.58",
+      "location": "Thottiyam, Trichy"
+    },
+    {
+      "degree": "Higher Secondary Certificate (HSC)",
+      "institution": "Lions Matriculation Higher Secondary School",
+      "period": "2021 \u2013 2022",
+      "score": "82%",
+      "location": "Ponnamaravathy, Pudukkottai"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Security Tester",
+      "company": "Vimix Technologies LLP",
+      "type": "Internship",
+      "period": "Jan 2026 \u2013 Present",
+      "location": "Coimbatore, Tamil Nadu, India",
+      "points": [
+        "Performing real-world application security testing to identify OWASP Top 10 vulnerabilities",
+        "Conducting penetration testing to assess security risks and explore cloud environments",
+        "Identified and documented 10 real-world security vulnerabilities in a live Django-based web application",
+        "Skills: Burp Suite, Cloud Computing, Penetration Testing, OWASP Top 10"
+      ]
+    },
+    {
+      "role": "Vulnerability Assessment & Penetration Testing",
+      "company": "HackupTechnology",
+      "type": "Internship",
+      "period": "Feb 2025 \u2013 Aug 2025",
+      "location": "Coimbatore, Tamil Nadu, India",
+      "points": [
+        "Trained in Web Application VAPT by validating vulnerabilities in demo labs using Burp Suite and OWASP ZAP",
+        "Transitioned to real-world application testing, identifying issues such as IDOR, authentication flaws, and misconfigurations",
+        "Securing applications through effective remediation measures and security best practices",
+        "Skills: Web Application Security, Ethical Hacking, Burp Suite, OWASP ZAP, Vulnerability Assessment"
+      ]
+    }
+  ],
+  "skills": {
+    "Penetration Testing": [
+      "Web App Security (WAPT)",
+      "Network Security Testing",
+      "Ethical Hacking"
+    ],
+    "Security Tools": [
+      "Burp Suite",
+      "OWASP ZAP",
+      "Nmap",
+      "SQLMap",
+      "Wfuzz",
+      "Nuclei",
+      "Metasploit",
+      "Beef Framework"
+    ],
+    "Vulnerability Assessment": [
+      "OWASP Top 10",
+      "SQLi",
+      "XSS",
+      "CSRF",
+      "Broken Authentication",
+      "Dorking"
+    ],
+    "SOC Tools": [
+      "Virus Total",
+      "Thunderbird",
+      "Nessus",
+      "Splunk",
+      "WireShark"
+    ],
+    "Digital Forensics": [
+      "Autopsy",
+      "FTK",
+      "Volatility"
+    ],
+    "Operating Systems": [
+      "Linux (Kali, Ubuntu)",
+      "Windows"
+    ],
+    "Programming": [
+      "Python",
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "Soft Skills": [
+      "Critical Thinking",
+      "Problem-Solving",
+      "Team Collaboration",
+      "Project Ownership"
+    ]
+  },
+  "projects": [
+    {
+      "title": "AI-Powered Cybersecurity Incident Management System",
+      "description": "Developed a cybersecurity-focused, AI-powered incident management system using machine learning models and NLP. Implemented threat intelligence to analyze reported attacks with secure reporting and real-time evidence analysis.",
+      "highlights": [
+        "Machine Learning & NLP Integration",
+        "Real-time threat intelligence",
+        "Secure reporting system",
+        "IEEE Conference Publication"
+      ],
+      "tags": [
+        "Python",
+        "ML",
+        "NLP",
+        "Cybersecurity",
+        "IEEE"
+      ],
+      "image": "Screenshot_2026-02-23_133535.png",
+      "link": "#"
+    },
+    {
+      "title": "AI-Powered Platform for Farmers",
+      "description": "Developed a CNN-based plant disease detection system integrated with marketplace functionality. Ensured data security and safe API communication throughout the platform.",
+      "highlights": [
+        "CNN-based disease detection",
+        "Secure API communication",
+        "Marketplace integration",
+        "IEEE Conference Publication"
+      ],
+      "tags": [
+        "Python",
+        "CNN",
+        "AI",
+        "Security",
+        "IEEE"
+      ],
+      "image": "6ee856bf_Screenshot_2026-02-23_133635.png",
+      "link": "#"
+    },
+    {
+      "title": "SQL Injection Attack Simulation",
+      "description": "Simulated SQL Injection attacks on web applications to understand attack vectors. Implemented input sanitization, parameterized queries, and secure coding practices.",
+      "highlights": [
+        "Attack vector simulation",
+        "Input sanitization",
+        "Parameterized queries",
+        "Security documentation"
+      ],
+      "tags": [
+        "SQLi",
+        "Web Security",
+        "Python",
+        "OWASP"
+      ],
+      "image": "project3.jpg",
+      "link": "#"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "AWS Cloud Practitioner",
+      "issuer": "Amazon Web Services",
+      "validation": "d3ad77640b924c73b8356e182070bf8a",
+      "date": "2024",
+      "image": "AWS_Certificate.jpg"
+    },
+    {
+      "title": "VAPT Internship Certificate",
+      "issuer": "HackupTechnology",
+      "validation": "HackupTech-VAPT-2025",
+      "image": "cert2.jpg",
+      "date": "2025"
+    },
+    {
+      "title": "UI/UX Design Professional Certification",
+      "issuer": "Professional Body",
+      "validation": "UIUX-CERT-2024",
+      "date": "2024",
+      "image": "WhatsApp_Image_2024-08-30_at_6.46.30_PM_2.jpeg"
+    },
+    {
+      "title": "Web & Full Stack Development Certification",
+      "issuer": "Professional Body",
+      "validation": "WEBDEV-CERT-2024",
+      "date": "2024",
+      "image": "WhatsApp_Image_2024-08-30_at_6.46.30_PM.jpeg"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "1st Prize \u2013 Cybersecurity Hackathon",
+      "event": "MAM College, Trichy",
+      "description": "College-level cybersecurity competition \u2013 First Place",
+      "year": "2024",
+      "icon": "\ud83c\udfc6",
+      "image": "Screenshot_2026-02-23_124308.png"
+    },
+    {
+      "title": "1st Prize \u2013 Technical Programming Quiz",
+      "event": "IT Department",
+      "description": "Demonstrated programming excellence",
+      "year": "2024",
+      "icon": "\ud83e\udd47",
+      "image": "Screenshot_2026-02-17_161028.png"
+    },
+    {
+      "title": "1st Place \u2013 Technical Quiz",
+      "event": "JJ College of Engineering",
+      "description": "Won college-level technical quiz competition",
+      "year": "2023",
+      "icon": "\ud83c\udfaf",
+      "image": "Screenshot_2026-02-23_124400.png"
+    },
+    {
+      "title": "2nd Prize \u2013 Intra-College Hackathon",
+      "event": "EEE Department",
+      "description": "Showcased innovative solutions",
+      "year": "2023",
+      "icon": "\ud83e\udd48",
+      "image": "Screenshot_2026-02-23_124447.png"
+    },
+    {
+      "title": "Academic Achievements",
+      "event": "Kongunadu College Of Engineering and Technology",
+      "description": "Achieved full marks in the subject and received \u20b9500 as a cash award for outstanding academic excellence.",
+      "year": "2024",
+      "icon": "\ud83c\udfc6",
+      "image": "Screenshot_2026-02-23_131027.png"
+    },
+    {
+      "title": "Academic Achievements",
+      "event": "Kongunadu College of Engineering and Technology",
+      "description": "Achieved full marks in the subject and received \u20b9500 as a cash award for outstanding academic excellence.",
+      "year": "2023",
+      "icon": "\ud83c\udfc6",
+      "image": "Screenshot_2026-02-23_131208.png"
+    },
+    {
+      "title": "Academic Achievements",
+      "event": "Kongunadu College Of Engineering and Technology",
+      "description": "Achieved full marks in the subject and received \u20b9500 as a cash award for outstanding academic excellence.",
+      "year": "2025",
+      "icon": "\ud83c\udfc6",
+      "image": "Screenshot_2026-02-23_131428.png"
+    },
+    {
+      "title": "1st Prize \u2013 Treasure Hunt Competition",
+      "event": "K Ramakrishna College of Engineering",
+      "description": "Won first place through strategic thinking and effective teamwork.",
+      "year": "2023",
+      "icon": "\ud83c\udfc6",
+      "image": "WhatsApp_Image_2024-08-30_at_6.46.30_PM_3.jpeg"
+    }
+  ],
+  "ctf_research": [
+    "Discovered and disclosed SQL Injection and XSS vulnerabilities in test environments",
+    "Enhanced web application security awareness through responsible disclosure",
+    "Solved real-world labs on TryHackMe and PortSwigger",
+    "Performed exploitation, privilege escalation, and post-exploitation",
+    "Participated in CTF competitions to sharpen penetration testing skills",
+    "Completed hands-on WAPT labs focusing on security testing methodologies"
+  ],
+  "stats": {
+    "vulnerabilities_found": 10,
+    "ctf_solved": 50,
+    "certifications": 4,
+    "projects": 3
+  }
+}
