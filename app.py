@@ -455,4 +455,5 @@ if __name__ == '__main__':
         save_data(get_default_data())
     if not os.path.exists(MESSAGES_FILE):
         save_messages([])
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
+    
