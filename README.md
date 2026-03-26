@@ -31,7 +31,7 @@ python app.py
 
 ## 🔑 ADMIN ACCESS
 - **URL:** http://localhost:5000/admin/login
-- **Password:** `Siddiq+++@123`
+- **Password:** `Siddiq`
 
 ---
 
